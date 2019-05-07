@@ -1,11 +1,39 @@
 "use strict";
+const showResults = document.querySelector("#show_results");
+const startGameLink = document.querySelector("#start_game");
 const form = document.querySelector("#authform");
 let submitBtn = document.querySelector("#submitBtn");
 let gameoverH3 = document.querySelector("#gameoverh3");
 let playerResults = document.querySelector("#player_results");
+let resultsTable = document.querySelector("#resultsTable");
 const socket = io();
-socket.on("all-results", function() {
-	
+startGameLink.addEventListener("click", function(event) {
+	resultsSection.classList.add("display-none");
+	startScreenSection.classList.remove("display-none");
+	gameOverSection.classList.add("display-none");
+	gameSection.classList.add("display-none");
+});
+showResults.addEventListener("click", function(event) {
+	socket.emit("get-results");
+});
+socket.on("all-results", function(results) {
+	resultsSection.classList.remove("display-none");
+	startScreenSection.classList.add("display-none");
+	gameOverSection.classList.add("display-none");
+	gameSection.classList.add("display-none");
+	resultsTable.innerHTML = "";
+	results.forEach(function(result) {
+		let tr = document.createElement("tr");
+		let td = document.createElement("td");
+		let td2 = document.createElement("td");
+		let username = document.createTextNode(result.player.username);
+		let points = document.createTextNode(result.score.points);
+		td.appendChild(username);
+		td2.appendChild(points);
+		tr.appendChild(td);
+		tr.appendChild(td2);
+		resultsTable.appendChild(tr);
+	});
 });
 authform.addEventListener("submit", (event) => {
 	event.preventDefault();

@@ -5,8 +5,8 @@ exports = module.exports = function(io) {
   io.on('connection', (socket) => {
   	/* result listeners */
   	socket.on("get-results", async (cb) => {
-  		let results = await db.Result.find({}).sort({createdAt: -1}).populate("player");
-  		if(!newResult) {
+  		let results = await db.Result.find({}).sort({"score.points": -1}).populate("player");
+  		if(!results) {
   			socket.emit("error", {
   				"type": "error",
   				"status": 404,

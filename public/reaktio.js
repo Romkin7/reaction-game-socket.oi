@@ -8,7 +8,6 @@ var time = 1000;
 var points = 0;
 var result = 0;
 var attempts = 3;
-var gameOver = false;
 var tulosNaytto = document.querySelector("#tulos");
 // nappulaelementit taulukkoon
 var nappulat = document.querySelectorAll(".nappula");
@@ -73,7 +72,6 @@ for(let i = 0; i < nappulat.length; i++) {
             }
         } else {
           attempts = attempts = 0 ? 0 : attempts -= 1;
-          gameOver = true;
           if(attempts === 0) {
             lopetaPeli();
           }
@@ -86,7 +84,6 @@ for(let i = 0; i < nappulat.length; i++) {
   }
   function startGame(user) {
     attempts = 3;
-    gameOver = false;
     startScreenSection.classList.add("display-none");
     gameSection.classList.remove("display-none");
     document.querySelector("#user-info").innerHTML = user.username;
