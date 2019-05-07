@@ -1,0 +1,6 @@
+.env
+node_modules
+gulpfile.js
+sass
+public/dev_js
+public_dev_css

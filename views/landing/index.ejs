@@ -1,0 +1,43 @@
+<% layout ("layout") -%>
+<section id="start-game">
+  <h1>Reaktiopeli</h1>
+  <hr>
+  <form id="authform">
+   <div>
+    <input type="text" name="username" id="username" required>
+    <label for="username">Nimimerkki *</label>
+  </div>
+  <button class="green button" id="submitBtn" type="submit">Aloita peli</button>
+</form>
+</section>
+<section id="game" class="display-none">
+  <h3 id="user-info"></h3>
+  <div id="tulos-container">Tulos: <span id="tulos">0</span></div>
+  <div id="nappula-container">
+    <div class="nappula blue" id="nappula0" data-number="0"></div>
+    <div class="nappula yellow" id="nappula1" data-number="1"></div>
+    <div class="nappula green" id="nappula2" data-number="2"></div>
+    <div class="nappula red" id="nappula3" data-number="3"></div>
+  </div>
+</section>
+<section id="overlay" class="display-none">
+  <h1>Game over</h1>
+  <h3 id="gameoverh3"></h3>
+  <ul id="player_results">
+
+  </ul>
+</section>
+<section id="results">
+  <h1>Tulokset</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nimimerkki</th>
+        <th>Pisteet</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+</section>

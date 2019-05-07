@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="fi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" rel="stylesheet">
+    <title>Reaktiopeli</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <% include ./partials/header %>
+    	<%- body -%>
+        <% include ./partials/footer %>
+    </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="reaktio.js"></script>
+    <script type="text/javascript" src="results.js"></script>
+</body>
+
+</html>
