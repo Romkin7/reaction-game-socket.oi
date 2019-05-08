@@ -39,8 +39,11 @@ authform.addEventListener("submit", (event) => {
 	event.preventDefault();
 	let username = document.querySelector("#username").value;
 	if(!/^[A-ZÅÄÖ]{1}?[a-zäöå0-9]{2,15}$/.test(username)) {
-		return console.error("Käyttäjänimi "+ username+" ei kelpaa. Käyttäjänimen täytyy alkaa isolla kirjaimella ja se voi sisältää pieniä kirjaimia ja numeroita 0-9 välillä.");
+		document.querySelector("#messageContainer").classList.remove("display-none");
+		return document.querySelector("#usernameValidationError").innerHTML = "Käyttäjänimi "+ username+" ei kelpaa. Käyttäjänimen täytyy alkaa isolla kirjaimella ja se voi sisältää pieniä kirjaimia ja numeroita 0-9 välillä.";
 	} else {
+		document.querySelector("#messageContainer").classList.add("display-none");
+		document.querySelector("#usernameValidationError").innerHTML = "";
 		let data = {
 			username: username
 		};
@@ -59,7 +62,6 @@ function sendPoints() {
 }
 socket.on("results", function(user) {
 	gameoverH3.innerHTML = user.username;
-	console.log(gameoverH3);
 	user.results.forEach(function(result) {
 		console.log(result);
 		let li = document.createElement("li");
