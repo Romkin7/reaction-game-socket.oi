@@ -3,6 +3,8 @@ const gameSection = document.querySelector("#game");
 const resultsSection = document.querySelector("#results");
 const startScreenSection = document.querySelector("#start-game");
 const gameOverSection = document.querySelector("#overlay");
+let kerrat = document.querySelector("#tries");
+let aikaSpan = document.querySelector("#time");
 //Pelin loogik MUUTTUJAT
 var time = 1000;
 var points = 0;
@@ -12,12 +14,6 @@ var tulosNaytto = document.querySelector("#tulos");
 // nappulaelementit taulukkoon
 var nappulat = document.querySelectorAll(".nappula");
 var nykyinen = 0; // nykyinen aktiivinen nappula
-
-// käynnistetään kone
-// arvotaan ensimmäinen aktiivinen nappula 1500ms päästä, sitten 1000ms
-// 1500 on parametri setTimeout-funktiolle
-// 1000 on parametri aktivoiSeuraava-funktiolle
-var ajastin = setTimeout(aktivoiSeuraava, 1500, time);
 
 // funktio, joka pyörittää konetta: aktivoi seuraavan nappulan ja ajastaa
 // sitä seuraavan nappulanvaihdon
@@ -64,27 +60,40 @@ for(let i = 0; i < nappulat.length; i++) {
             points++;
             result++;
             tulosNaytto.innerHTML = result;
-            if(points === 10) {
+            if(points === 3) {
                 points = 0;
-                time = time === 400 ? time : time - 200;
+                time = time === 400 ? time : time * 0.95;
+                aikaSpan.innerHTML = time;
                 clearTimeout(ajastin);
                 ajastin = setTimeout(aktivoiSeuraava, time, time);
             }
         } else {
           attempts = attempts = 0 ? 0 : attempts -= 1;
+          tries.innerHTML = attempts;
           if(attempts === 0) {
             lopetaPeli();
           }
         }
     });
 }
-  // generoi satunnaisen kokonaisluvun väliltä min - max
-  function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  function startGame(user) {
-    attempts = 3;
-    startScreenSection.classList.add("display-none");
-    gameSection.classList.remove("display-none");
-    document.querySelector("#user-info").innerHTML = user.username;
-  }
+// generoi satunnaisen kokonaisluvun väliltä min - max
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function startGame(user) {
+  attempts = 3;
+  tries.innerHTML = attempts;
+  result = 0;
+  points = 0;
+  tulosNaytto.innerHTML = result;
+  time = 1000;
+  aikaSpan.innerHTML = time;
+  // käynnistetään kone
+  // arvotaan ensimmäinen aktiivinen nappula 1500ms päästä, sitten 1000ms
+  // 1500 on parametri setTimeout-funktiolle
+  // 1000 on parametri aktivoiSeuraava-funktiolle
+  var ajastin = setTimeout(aktivoiSeuraava, 1500, time);
+  startScreenSection.classList.add("display-none");
+  gameSection.classList.remove("display-none");
+  document.querySelector("#user-info").innerHTML = user.username;
+}

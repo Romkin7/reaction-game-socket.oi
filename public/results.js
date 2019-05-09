@@ -62,8 +62,8 @@ function sendPoints() {
 }
 socket.on("results", function(user) {
 	gameoverH3.innerHTML = user.username;
+	playerResults.innerHTML = "";
 	user.results.forEach(function(result) {
-		console.log(result);
 		let li = document.createElement("li");
 		var text = document.createTextNode(result.score.points);
 		li.appendChild(text);
