@@ -2,6 +2,7 @@
 const showResults = document.querySelector("#show_results");
 const startGameLink = document.querySelector("#start_game");
 const form = document.querySelector("#authform");
+let usersOl = document.querySelector("#users");
 let submitBtn = document.querySelector("#submitBtn");
 let gameoverH3 = document.querySelector("#gameoverh3");
 let playerResults = document.querySelector("#player_results");
@@ -26,12 +27,18 @@ socket.on("all-results", function(results) {
 		let tr = document.createElement("tr");
 		let td = document.createElement("td");
 		let td2 = document.createElement("td");
+		let td3 = document.createElement("td");
 		let username = document.createTextNode(result.player.username);
 		let points = document.createTextNode(result.score.points);
+		const css = "color: indigo; font-size: 22px; transform: scale(1.3);";
+		let resultCreated = document.createTextNode(new Date(result.createdAt).toLocaleString("FI-fi"));
+		console.log("%c"+result.createdAt, css);
 		td.appendChild(username);
 		td2.appendChild(points);
+		td3.appendChild(resultCreated);
 		tr.appendChild(td);
 		tr.appendChild(td2);
+		tr.appendChild(td3);
 		resultsTable.appendChild(tr);
 	});
 });
@@ -53,12 +60,43 @@ authform.addEventListener("submit", (event) => {
 socket.on("startgame", function(user) {
 	startGame(user);
 });
+socket.on('new-user', (user) => {
+  console.log(user);
+  let obj = JSON.parse(user);
+  let node = document.createElement('li'); 
+  node.setAttribute('id', obj.user.username);
+  let textnode = document.createTextNode('Player: ' + obj.user.username + ', Tulos: ' + obj.Tulos + ', Attemps: ' + obj.Attemps + ', Status: ' + obj.Status); 
+  node.appendChild(textnode);  
+  usersOl.appendChild(node); 
+});
+socket.on('check-users', (users) => {
+  if (typeof users !== 'undefined') {
+  	usersOl.innerHTML = "";
+    let obj = new Map(JSON.parse(users));
+    for (let user of obj) {
+        console.log(user);
+        let node = document.createElement('li'); 
+        let who = user[1].user.username;
+        let className = user[1].user.username;
+        node.setAttribute('class', className);
+        node.setAttribute('id', user.Loginname);
+        let textnode = document.createTextNode(who + ': ' + user[1].user.username + ', Tulos: ' + user[1].Tulos + ', Attemps: ' + user[1].Attemps + ', Status: ' + user[1].Status); 
+        node.appendChild(textnode);  
+        usersOl.appendChild(node);
+    }
+  }
+});
+function sendClick(obj) {
+	socket.emit('painallus', { painallus: JSON.stringify(obj) }); 
+	return;
+}
 function sendPoints() {
 	let data = {
 		user: document.querySelector("#user-info").innerHTML,
 		result: result  
 	}
 	socket.emit("gameover", data);
+	return;
 }
 socket.on("results", function(user) {
 	gameoverH3.innerHTML = user.username;

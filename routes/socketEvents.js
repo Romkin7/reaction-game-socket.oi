@@ -1,5 +1,16 @@
 "use strict";
 const db = require('../models');
+let users = new Map();
+function setUserToMap (user) {
+  let obj = {};
+  obj.user = user;
+  obj.Tulos = 0;
+  obj.Attemps = 3;
+  obj.Status = 'Active';
+
+  users.set(user.username, obj); 
+  return;
+} 
 exports = module.exports = function(io) { 
   // Set socket.io listeners.
   io.on('connection', (socket) => {
@@ -30,12 +41,30 @@ exports = module.exports = function(io) {
   					"message": "Couldn't create new user into database."
   				});
   			} else {
-  				socket.emit("startgame", newUser);
+          await setUserToMap(newUser);
+          socket.emit("startgame", newUser);
   			}
   		} else {
-  			socket.emit("startgame", existingUser);
+        await setUserToMap(existingUser);
+        socket.emit("startgame", existingUser);
   		}
+      socket.broadcast.emit('new-user', JSON.stringify(users.get(data.username)));
+      return;
   	});
+    socket.on('painallus', (data) => {
+      console.log(data);
+      let obj = JSON.parse(data.painallus);
+      if (obj) {
+        let user = users.get(obj.username); 
+        user.Tulos = obj.Tulos;
+        user.Attemps = parseFloat(obj.AttempsCount);  
+        users = new Map([...users.entries()].sort((a, b) => {
+          return b[1].Tulos - a[1].Tulos;
+        }));
+        // io.emit('results-users', JSON.stringify(users.get(obj.LoginName)) );
+        socket.broadcast.emit('check-users', JSON.stringify(Array.from(users.entries())) );
+        }
+    });
   	socket.on("gameover", async(data) =>{
   		let user = await db.User.findOne({"username": data.user});
   		if(!user) {
@@ -50,7 +79,6 @@ exports = module.exports = function(io) {
   		result.score.points = data.result;
   		result.score.time = 90000;
   		let newResult = await result.save();
-  		console.log(newResult);
   		user.results.push(newResult);
   		let updatedUser = await user.save();
   		let foundUpdatedUser = await db.User.findById(updatedUser._id).populate("results");

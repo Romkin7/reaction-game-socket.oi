@@ -56,17 +56,24 @@ function lopetaPeli() {
   // onclick-käsittelyjät kaikille nappuloille
 for(let i = 0; i < nappulat.length; i++) {
     nappulat[i].addEventListener("click", function(event) {
-        if(Number(this.dataset.number) === nykyinen) {
-            points++;
-            result++;
-            tulosNaytto.innerHTML = result;
-            if(points === 3) {
-                points = 0;
-                time = time === 400 ? time : time * 0.95;
-                aikaSpan.innerHTML = time;
-                clearTimeout(ajastin);
-                ajastin = setTimeout(aktivoiSeuraava, time, time);
-            }
+      if(Number(this.dataset.number) === nykyinen) {
+        points++;
+        result++;
+        tulosNaytto.innerHTML = result;
+        if(points === 3) {
+          points = 0;
+          time = time === 400 ? time : time * 0.95;
+          aikaSpan.innerHTML = (time / 1000) + ' seconds';
+          clearTimeout(ajastin);
+          ajastin = setTimeout(aktivoiSeuraava, time, time);
+        }
+      let obj = {};
+      obj.I = i;
+      obj.Nykyinen = nykyinen;
+      obj.Tulos = result;
+      obj.AttempsCount = attempts;
+      obj.username = document.querySelector("#user-info").innerHTML;
+      sendClick(obj);
         } else {
           attempts = attempts = 0 ? 0 : attempts -= 1;
           tries.innerHTML = attempts;
@@ -87,13 +94,14 @@ function startGame(user) {
   points = 0;
   tulosNaytto.innerHTML = result;
   time = 1000;
-  aikaSpan.innerHTML = time;
+  aikaSpan.innerHTML = (time / 1000) + " seconds";
   // käynnistetään kone
   // arvotaan ensimmäinen aktiivinen nappula 1500ms päästä, sitten 1000ms
   // 1500 on parametri setTimeout-funktiolle
   // 1000 on parametri aktivoiSeuraava-funktiolle
-  var ajastin = setTimeout(aktivoiSeuraava, 1500, time);
+  document.querySelector("#user-info").innerHTML = user.username;
   startScreenSection.classList.add("display-none");
   gameSection.classList.remove("display-none");
-  document.querySelector("#user-info").innerHTML = user.username;
+  var ajastin = setTimeout(aktivoiSeuraava, 1500, time);
+  return;
 }
