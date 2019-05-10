@@ -79,7 +79,7 @@ socket.on('check-users', (users) => {
         let who = user[1].user.username;
         let className = user[1].user.username;
         node.setAttribute('class', className);
-        node.setAttribute('id', user.Loginname);
+        node.setAttribute('id', user.username);
         let textnode = document.createTextNode(who + ': ' + user[1].user.username + ', Tulos: ' + user[1].Tulos + ', Attemps: ' + user[1].Attemps + ', Status: ' + user[1].Status); 
         node.appendChild(textnode);  
         usersOl.appendChild(node);
